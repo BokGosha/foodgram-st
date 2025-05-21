@@ -10,10 +10,14 @@ from .services import shopping_cart
 from .filters import RecipeFilter
 from .permissions import IsOwnerOrReadOnly
 from users.models import User, Follow
-from recipes.models import Recipe, Ingredient, Favorite, ShoppingCart, RecipeShortLink
+from recipes.models import (
+    Recipe, Ingredient,
+    Favorite, ShoppingCart, RecipeShortLink)
 from .serializers import (
-    UserSerializer, UserRegistrationSerializer, IngredientSerializer, RecipeListSerializer,
-    RecipeWriteSerializer, RecipeMinifiedSerializer, SetAvatarSerializer, FollowSerializer)
+    UserSerializer, UserRegistrationSerializer,
+    IngredientSerializer, RecipeListSerializer,
+    RecipeWriteSerializer, RecipeMinifiedSerializer,
+    SetAvatarSerializer, FollowSerializer)
 from .paginations import CustomPagination
 
 
@@ -35,7 +39,7 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(request.user)
         return Response(serializer.data)
 
-    @action(["post"],
+    @action(['post'],
             detail=False,
             permission_classes=[IsAuthenticated])
     def set_password(self, request):
@@ -44,7 +48,7 @@ class UserViewSet(viewsets.ModelViewSet):
             context={'request': request},
         )
         if serializer.is_valid(raise_exception=True):
-            self.request.user.set_password(serializer.data["new_password"])
+            self.request.user.set_password(serializer.data['new_password'])
             self.request.user.save()
             return Response(
                 'Пароль успешно изменен',
@@ -116,8 +120,8 @@ class UserViewSet(viewsets.ModelViewSet):
         if request.method == 'PUT':
             if 'avatar' not in request.data:
                 return Response(
-                    {"avatar": [
-                        "Это поле обязательно"
+                    {'avatar': [
+                        'Это поле обязательно'
                     ]
                     },
                     status=status.HTTP_400_BAD_REQUEST,
@@ -173,7 +177,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         short_link, code = RecipeShortLink.objects.get_or_create(
             recipe=recipe)
         return Response({
-            'short-link': request.build_absolute_uri(f'/s/{short_link.code}/')
+            'short-link': request.build_absolute_uri(
+                f'/s/{short_link.code}/')
         })
 
     @action(detail=True, methods=['post', 'delete'],
@@ -182,7 +187,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         recipe = get_object_or_404(Recipe, pk=pk)
 
         if request.method == 'POST':
-            if Favorite.objects.filter(author=request.user, recipe=recipe).exists():
+            if Favorite.objects.filter(
+                    author=request.user,
+                    recipe=recipe).exists():
                 return Response(
                     {'detail': [
                         'Рецепт уже в избранном'
@@ -219,7 +226,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         recipe = get_object_or_404(Recipe, pk=pk)
 
         if request.method == 'POST':
-            if ShoppingCart.objects.filter(author=request.user, recipe=recipe).exists():
+            if ShoppingCart.objects.filter(
+                    author=request.user,
+                    recipe=recipe).exists():
                 return Response(
                     {'detail': [
                         'Рецепт уже в списке покупок'
@@ -257,7 +266,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         author = User.objects.get(id=self.request.user.pk)
         if author.shopping_cart.exists():
             return shopping_cart(self, request, author)
-        
+
         return Response(
             'Список покупок пуст.',
             status=status.HTTP_404_NOT_FOUND,
@@ -280,4 +289,6 @@ class ShortLinkRedirect(views.APIView):
     def get(self, request, code):
         short_link = get_object_or_404(RecipeShortLink, code=code)
 
-        return redirect(f'http://{request.get_host()}/recipes/{short_link.recipe.id}/')
+        return redirect(
+            f'http://{request.get_host()}/recipes/{short_link.recipe.id}/'
+        )

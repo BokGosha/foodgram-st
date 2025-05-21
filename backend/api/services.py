@@ -14,7 +14,7 @@ def shopping_cart(self, request, author):
         amounts=Sum('amount', distinct=True)
     ).order_by('amounts')
 
-    today = date.today().strftime("%d-%m-%Y")
+    today = date.today().strftime('%d-%m-%Y')
     shopping_list = f'Список покупок. Дата: {today}\n\n'
     for ingredient in sum_ingredients_in_recipes:
         shopping_list += (

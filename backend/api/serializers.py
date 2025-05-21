@@ -6,7 +6,8 @@ from rest_framework.exceptions import ValidationError
 
 from users.models import User, Follow
 from recipes.models import (
-    RecipeShortLink, Recipe, Ingredient, RecipeIngredient, ShoppingCart, Favorite)
+    RecipeShortLink, Recipe, Ingredient,
+    RecipeIngredient, ShoppingCart, Favorite)
 
 
 class Base64ImageField(serializers.ImageField):
@@ -44,7 +45,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_is_subscribed(self, obj):
         user = self.context.get('request').user
-        return not user.is_anonymous and Follow.objects.filter(user=user, author=obj).exists()
+        return not user.is_anonymous and \
+            Follow.objects.filter(user=user, author=obj).exists()
 
 
 class SetAvatarSerializer(serializers.ModelSerializer):
@@ -98,7 +100,8 @@ class FollowSerializer(serializers.ModelSerializer):
     def get_avatar(self, obj):
         request = self.context.get('request')
         if obj.author.avatar:
-            return request.build_absolute_uri(obj.author.avatar.url) if request else obj.author.avatar.url
+            return request.build_absolute_uri(obj.author.avatar.url) \
+                if request else obj.author.avatar.url
         return None
 
     def get_recipes(self, obj):
@@ -195,11 +198,13 @@ class RecipeListSerializer(serializers.ModelSerializer):
 
     def get_is_favorited(self, obj):
         user = self.context.get('request').user
-        return not user.is_anonymous and Favorite.objects.filter(recipe=obj).exists()
+        return not user.is_anonymous and \
+            Favorite.objects.filter(recipe=obj).exists()
 
     def get_is_in_shopping_cart(self, obj):
         user = self.context.get('request').user
-        return not user.is_anonymous and ShoppingCart.objects.filter(recipe=obj).exists()
+        return not user.is_anonymous and \
+            ShoppingCart.objects.filter(recipe=obj).exists()
 
 
 class AddIngredientSerializer(serializers.ModelSerializer):
@@ -279,7 +284,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')
-        if ingredients == None or ingredients == []:
+        if ingredients is None or ingredients == []:
             raise serializers.ValidationError(
                 {'ingredients': [
                     'Необходимо указать хотя бы один ингредиент!'
@@ -292,7 +297,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         ingredients = validated_data.pop('ingredients', None)
-        if ingredients == None or ingredients == []:
+        if ingredients is None or ingredients == []:
             raise serializers.ValidationError(
                 {'ingredients': [
                     'Необходимо указать хотя бы один ингредиент!'
@@ -325,4 +330,5 @@ class RecipeShortLinkSerializer(serializers.ModelSerializer):
 
     def get_short_link(self, obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(f'/s/{obj.code}/') if request else None
+        return request.build_absolute_uri(f'/s/{obj.code}/') \
+            if request else None
