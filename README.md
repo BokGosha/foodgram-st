@@ -60,7 +60,7 @@ docker-compose up -d --build
 
 ### 4. Создайте суперпользователя
 ```bash
-docker-compose exec backend python manage.py createsuperuser
+docker-compose exec foodgram-back python manage.py createsuperuser
 ```
 
 ---
