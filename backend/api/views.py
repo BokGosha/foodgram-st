@@ -9,7 +9,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .services import shopping_cart
 from .filters import RecipeFilter
 from .permissions import IsOwnerOrReadOnly
-from users.models import User, Follow
+from users.models import User
 from recipes.models import (
     Recipe, Ingredient,
     Favorite, ShoppingCart, RecipeShortLink)
@@ -47,16 +47,13 @@ class UserViewSet(viewsets.ModelViewSet):
             data=request.data,
             context={'request': request},
         )
-        if serializer.is_valid(raise_exception=True):
-            self.request.user.set_password(serializer.data['new_password'])
-            self.request.user.save()
-            return Response(
-                'Пароль успешно изменен',
-                status=status.HTTP_204_NO_CONTENT,
-            )
+
+        serializer.is_valid(raise_exception=True)
+        self.request.user.set_password(serializer.data['new_password'])
+        self.request.user.save()
         return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST,
+            'Пароль успешно изменен',
+            status=status.HTTP_204_NO_CONTENT,
         )
 
     @action(detail=True,
@@ -71,22 +68,16 @@ class UserViewSet(viewsets.ModelViewSet):
                 context={'request': request, 'author': author},
             )
 
-            if serializer.is_valid(raise_exception=True):
-                serializer.save(author=author, user=user)
-                return Response(
-                    serializer.data,
-                    status=status.HTTP_201_CREATED,
-                )
+            serializer.is_valid(raise_exception=True)
+            serializer.save(author=author, user=user)
             return Response(
-                {'detail': [
-                    'Объект не найден'
-                ]
-                },
-                status=status.HTTP_404_NOT_FOUND,
+                serializer.data,
+                status=status.HTTP_201_CREATED,
             )
 
-        if Follow.objects.filter(author=author, user=user).exists():
-            Follow.objects.get(author=author).delete()
+        if user.follower.filter(author=author).exists():
+            follow = user.follower.get(author=author)
+            follow.delete()
             return Response(
                 'Успешная отписка',
                 status=status.HTTP_204_NO_CONTENT,
@@ -103,8 +94,7 @@ class UserViewSet(viewsets.ModelViewSet):
             methods=['get'],
             permission_classes=[IsAuthenticated])
     def subscriptions(self, request):
-        follows = Follow.objects.filter(
-            user=self.request.user).order_by('author__username')
+        follows = request.user.follower.order_by('author__username')
         pages = self.paginate_queryset(follows)
         serializer = FollowSerializer(pages,
                                       many=True,
@@ -187,8 +177,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         recipe = get_object_or_404(Recipe, pk=pk)
 
         if request.method == 'POST':
-            if Favorite.objects.filter(
-                    author=request.user,
+            if request.user.favorite.filter(
                     recipe=recipe).exists():
                 return Response(
                     {'detail': [
@@ -205,8 +194,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             )
 
         if request.method == 'DELETE':
-            favorite = Favorite.objects.filter(
-                author=request.user,
+            favorite = request.user.favorite.filter(
                 recipe=recipe
             ).first()
             if not favorite:
@@ -226,8 +214,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         recipe = get_object_or_404(Recipe, pk=pk)
 
         if request.method == 'POST':
-            if ShoppingCart.objects.filter(
-                    author=request.user,
+            if request.user.shopping_cart.filter(
                     recipe=recipe).exists():
                 return Response(
                     {'detail': [
@@ -244,8 +231,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             )
 
         if request.method == 'DELETE':
-            cart_item = ShoppingCart.objects.filter(
-                author=request.user,
+            cart_item = request.user.shopping_cart.filter(
                 recipe=recipe
             ).first()
             if not cart_item:

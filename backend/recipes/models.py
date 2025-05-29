@@ -1,8 +1,12 @@
 from django.db import models
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 import secrets
 
 from users.models import User
+
+
+MIN_VALUE_COOKING_TIME = 1
+MAX_VALUE_COOKING_TIME = 32_000
 
 
 class Ingredient(models.Model):
@@ -55,7 +59,16 @@ class Recipe(models.Model):
 
     cooking_time = models.PositiveSmallIntegerField(
         'Время приготовления',
-        validators=[MinValueValidator(1, 'Минимальное время приготовления')],
+        validators=[
+            MinValueValidator(
+                MIN_VALUE_COOKING_TIME,
+                'Минимальное время приготовления 1',
+            ),
+            MaxValueValidator(
+                MAX_VALUE_COOKING_TIME,
+                'Максимальное время приготовления 32000',
+            ),
+        ],
         help_text='Укажите время приготовления рецепта в минутах',
     )
 
@@ -103,7 +116,14 @@ class RecipeIngredient(models.Model):
     amount = models.PositiveSmallIntegerField(
         'Количество',
         validators=[
-            MinValueValidator(1, 'Минимальное количество ингредиентов 1')
+            MinValueValidator(
+                MIN_VALUE_COOKING_TIME,
+                'Минимальное количество ингредиентов 1',
+            ),
+            MaxValueValidator(
+                MAX_VALUE_COOKING_TIME,
+                'Максимальное количество ингредиентов 32000',
+            ),
         ],
     )
 
