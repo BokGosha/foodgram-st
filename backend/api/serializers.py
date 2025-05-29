@@ -6,8 +6,8 @@ from rest_framework.exceptions import ValidationError
 
 from users.models import User, Follow
 from recipes.models import (
-    Favorite, RecipeShortLink, Recipe, Ingredient,
-    RecipeIngredient, ShoppingCart)
+    RecipeShortLink, Recipe, Ingredient,
+    RecipeIngredient)
 
 
 MAX_VALUE = 32_000
