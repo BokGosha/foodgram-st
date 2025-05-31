@@ -134,7 +134,7 @@ class FollowSerializer(serializers.ModelSerializer):
     def get_recipes(self, obj):
         request = self.context.get('request')
         limit = request.GET.get('recipes_limit')
-        recipes = Recipe.objects.filter(author=obj.author)
+        recipes = obj.author.recipes.all()
         if limit and limit.isdigit():
             recipes = recipes[: int(limit)]
         return RecipeMinifiedSerializer(recipes, many=True).data
