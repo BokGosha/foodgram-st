@@ -1,7 +1,12 @@
 from django.contrib import admin
 
-from .models import (Favorite, Ingredient,
-                     RecipeIngredient, Recipe, ShoppingCart,)
+from .models import (
+    Favorite,
+    Ingredient,
+    RecipeIngredient,
+    Recipe,
+    ShoppingCart,
+)
 
 
 class FavoriteAdmin(admin.ModelAdmin):
@@ -47,6 +52,7 @@ class RecipeAdmin(admin.ModelAdmin):
 
     def in_favorite(self, obj):
         return obj.favorite.all().count()
+
     in_favorite.short_description = 'Добавленные рецепты в избранное'
 
 

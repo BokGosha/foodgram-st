@@ -14,6 +14,9 @@ class Migration(migrations.Migration):
             model_name='recipe',
             name='image',
             field=models.ImageField(
-                help_text='Добавьте изображение рецепта', upload_to='recipes/', verbose_name='Картинка'),
+                help_text='Добавьте изображение рецепта',
+                upload_to='recipes/',
+                verbose_name='Картинка',
+            ),
         ),
     ]

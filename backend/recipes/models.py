@@ -92,10 +92,8 @@ class Recipe(models.Model):
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
         constraints = [
-            models.UniqueConstraint(
-                fields=['name', 'author'],
-                name='unique_recipes'
-            )
+            models.UniqueConstraint(fields=['name', 'author'],
+                                    name='unique_recipes')
         ]
 
 
@@ -135,8 +133,7 @@ class RecipeIngredient(models.Model):
         verbose_name_plural = 'Ингредиенты в рецептах'
         constraints = [
             models.UniqueConstraint(
-                fields=['recipe', 'ingredient'],
-                name='unique_ingredients'
+                fields=['recipe', 'ingredient'], name='unique_ingredients'
             )
         ]
 
@@ -161,8 +158,7 @@ class BaseAuthorRecipeRelation(models.Model):
         abstract = True
         constraints = [
             models.UniqueConstraint(
-                fields=['author', 'recipe'],
-                name='unique_%(class)s'
+                fields=['author', 'recipe'], name='unique_%(class)s'
             )
         ]
 

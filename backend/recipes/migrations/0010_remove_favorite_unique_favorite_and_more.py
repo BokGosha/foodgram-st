@@ -33,11 +33,13 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name='favorite',
             constraint=models.UniqueConstraint(
-                fields=('author', 'recipe'), name='unique_favorite'),
+                fields=('author', 'recipe'), name='unique_favorite'
+            ),
         ),
         migrations.AddConstraint(
             model_name='shoppingcart',
             constraint=models.UniqueConstraint(
-                fields=('author', 'recipe'), name='unique_shoppingcart'),
+                fields=('author', 'recipe'), name='unique_shoppingcart'
+            ),
         ),
     ]

@@ -14,12 +14,25 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='RecipeShortLink',
             fields=[
-                ('id', models.BigAutoField(auto_created=True,
-                 primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('code', models.CharField(max_length=10, unique=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('recipe', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE,
-                 related_name='short_link', to='recipes.recipe')),
+                (
+                    'recipe',
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='short_link',
+                        to='recipes.recipe',
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'Короткая ссылка рецепта',

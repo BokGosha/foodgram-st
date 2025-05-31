@@ -6,13 +6,12 @@ from recipes.models import RecipeIngredient
 
 
 def shopping_cart(self, request, author):
-    sum_ingredients_in_recipes = RecipeIngredient.objects.filter(
-        recipe__shopping_cart__author=author
-    ).values(
-        'ingredient__name', 'ingredient__measurement_unit'
-    ).annotate(
-        amounts=Sum('amount', distinct=True)
-    ).order_by('amounts')
+    sum_ingredients_in_recipes = (
+        RecipeIngredient.objects.filter(recipe__shopping_cart__author=author)
+        .values('ingredient__name', 'ingredient__measurement_unit')
+        .annotate(amounts=Sum('amount', distinct=True))
+        .order_by('amounts')
+    )
 
     today = date.today().strftime('%d-%m-%Y')
     shopping_list = f'Список покупок. Дата: {today}\n\n'

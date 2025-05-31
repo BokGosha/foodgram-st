@@ -14,11 +14,32 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='recipe',
             name='cooking_time',
-            field=models.PositiveSmallIntegerField(help_text='Укажите время приготовления рецепта в минутах', validators=[django.core.validators.MinValueValidator(1, 'Минимальное время приготовления'), django.core.validators.MaxValueValidator(32000, 'Максимальное время приготовления')], verbose_name='Время приготовления'),
+            field=models.PositiveSmallIntegerField(
+                help_text='Укажите время приготовления рецепта в минутах',
+                validators=[
+                    django.core.validators.MinValueValidator(
+                        1, 'Минимальное время приготовления'
+                    ),
+                    django.core.validators.MaxValueValidator(
+                        32000, 'Максимальное время приготовления'
+                    ),
+                ],
+                verbose_name='Время приготовления',
+            ),
         ),
         migrations.AlterField(
             model_name='recipeingredient',
             name='amount',
-            field=models.PositiveSmallIntegerField(validators=[django.core.validators.MinValueValidator(1, 'Минимальное количество ингредиентов 1'), django.core.validators.MaxValueValidator(32000, 'Максимальное количество ингредиентов 32000')], verbose_name='Количество'),
+            field=models.PositiveSmallIntegerField(
+                validators=[
+                    django.core.validators.MinValueValidator(
+                        1, 'Минимальное количество ингредиентов 1'
+                    ),
+                    django.core.validators.MaxValueValidator(
+                        32000, 'Максимальное количество ингредиентов 32000'
+                    ),
+                ],
+                verbose_name='Количество',
+            ),
         ),
     ]

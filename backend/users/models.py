@@ -13,7 +13,7 @@ class User(AbstractUser):
 
     username_validator = RegexValidator(
         regex=r'^[\w.@+-]+\Z',
-        message='Логин может содержать только буквы, цифры и @/./+/-/_'
+        message='Логин может содержать только буквы, цифры и @/./+/-/_',
     )
 
     username = models.CharField(

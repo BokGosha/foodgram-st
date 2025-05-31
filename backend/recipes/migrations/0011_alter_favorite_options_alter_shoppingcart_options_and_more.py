@@ -12,18 +12,27 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='favorite',
-            options={'default_related_name': 'favorite', 'verbose_name': 'Избранный рецепт',
-                     'verbose_name_plural': 'Избранные рецепты'},
+            options={
+                'default_related_name': 'favorite',
+                'verbose_name': 'Избранный рецепт',
+                'verbose_name_plural': 'Избранные рецепты',
+            },
         ),
         migrations.AlterModelOptions(
             name='shoppingcart',
-            options={'default_related_name': 'shopping_cart',
-                     'verbose_name': 'Список покупок', 'verbose_name_plural': 'Списки покупок'},
+            options={
+                'default_related_name': 'shopping_cart',
+                'verbose_name': 'Список покупок',
+                'verbose_name_plural': 'Списки покупок',
+            },
         ),
         migrations.AlterField(
             model_name='recipe',
             name='image',
             field=models.ImageField(
-                help_text='Добавьте изображение рецепта', upload_to='', verbose_name='Картинка'),
+                help_text='Добавьте изображение рецепта',
+                upload_to='',
+                verbose_name='Картинка',
+            ),
         ),
     ]

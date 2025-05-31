@@ -5,8 +5,12 @@ from .models import User, Follow
 
 class UserAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'first_name', 'last_name',
-        'username', 'email', 'is_staff',
+        'id',
+        'first_name',
+        'last_name',
+        'username',
+        'email',
+        'is_staff',
     )
     search_fields = (
         'email',

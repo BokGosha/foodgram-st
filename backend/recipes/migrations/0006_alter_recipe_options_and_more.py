@@ -15,8 +15,12 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='recipe',
-            options={'default_related_name': 'recipes', 'ordering': [
-                '-pub_date'], 'verbose_name': 'Рецепт', 'verbose_name_plural': 'Рецепты'},
+            options={
+                'default_related_name': 'recipes',
+                'ordering': ['-pub_date'],
+                'verbose_name': 'Рецепт',
+                'verbose_name_plural': 'Рецепты',
+            },
         ),
         migrations.RemoveConstraint(
             model_name='ingredientrecipe',
@@ -29,29 +33,42 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='ingredientrecipe',
             name='recipe',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
-                                    related_name='recipe_ingredients', to='recipes.recipe', verbose_name='Рецепт'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='recipe_ingredients',
+                to='recipes.recipe',
+                verbose_name='Рецепт',
+            ),
         ),
         migrations.AlterField(
             model_name='recipe',
             name='author',
-            field=models.ForeignKey(help_text='Автор', on_delete=django.db.models.deletion.CASCADE,
-                                    to=settings.AUTH_USER_MODEL, verbose_name='Автор'),
+            field=models.ForeignKey(
+                help_text='Автор',
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+                verbose_name='Автор',
+            ),
         ),
         migrations.AlterField(
             model_name='recipe',
             name='ingredients',
             field=models.ManyToManyField(
-                through='recipes.IngredientRecipe', to='recipes.ingredient', verbose_name='Ингредиенты'),
+                through='recipes.IngredientRecipe',
+                to='recipes.ingredient',
+                verbose_name='Ингредиенты',
+            ),
         ),
         migrations.AddConstraint(
             model_name='ingredientrecipe',
             constraint=models.UniqueConstraint(
-                fields=('recipe', 'ingredient'), name='unique_ingredients'),
+                fields=('recipe', 'ingredient'), name='unique_ingredients'
+            ),
         ),
         migrations.AddConstraint(
             model_name='recipe',
             constraint=models.UniqueConstraint(
-                fields=('name', 'author'), name='unique_recipes'),
+                fields=('name', 'author'), name='unique_recipes'
+            ),
         ),
     ]
